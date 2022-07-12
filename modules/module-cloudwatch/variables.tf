@@ -8,7 +8,7 @@ variable "project" {
 }
 
 variable "create_prefix_for_resources" {
-  description = "boolean variable to include the prefix 'var.project_var.env' in all the resourse names."
+  description = "boolean variable to include the prefix '{var.project}_{var.env}' in all the resourse names."
   default     = true
 }
 
