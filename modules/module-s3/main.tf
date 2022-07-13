@@ -53,7 +53,7 @@ locals {
 ################################################################################
 resource "aws_iam_user" "s3_user" {
   count = var.create_bucket_access_user ? 1 : 0
-  name  = "${aws_s3_bucket.bucket}-s3-user"
+  name  = "${aws_s3_bucket.bucket.bucket}-s3-user"
 }
 
 resource "aws_iam_access_key" "s3_user_access_key" {
@@ -63,7 +63,7 @@ resource "aws_iam_access_key" "s3_user_access_key" {
 
 resource "aws_iam_user_policy" "s3_user_policy" {
   count = var.create_bucket_access_user ? 1 : 0
-  name  = "${aws_s3_bucket.bucket}-s3-user-policy"
+  name  = "${aws_s3_bucket.bucket.bucket}-s3-user-policy"
   user  = aws_iam_user.s3_user[0].name
 
   policy = <<-EOF
@@ -81,8 +81,8 @@ resource "aws_iam_user_policy" "s3_user_policy" {
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:s3:::${aws_s3_bucket.bucket}",
-        "arn:aws:s3:::${aws_s3_bucket.bucket}/*"
+        "arn:aws:s3:::${aws_s3_bucket.bucket.bucket}",
+        "arn:aws:s3:::${aws_s3_bucket.bucket.bucket}/*"
       ]
     }
   ]
