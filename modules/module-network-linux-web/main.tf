@@ -25,11 +25,11 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "subnet-1" {
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.subnet_prefix[0].cidr_block
-  availability_zone       = var.subnet_prefix[0].availability_zone
-  map_public_ip_on_launch = var.subnet_prefix[0].map_public_ip_on_launch
+  cidr_block              = var.subnet_public[0].cidr_block
+  availability_zone       = var.subnet_public[0].availability_zone
+  map_public_ip_on_launch = var.subnet_public[0].map_public_ip_on_launch
   tags = {
-    Name = var.create_prefix_for_resources ? "${local.prefix}_${var.subnet_prefix[0].name}" : "${var.subnet_prefix[0].name}"
+    Name = var.create_prefix_for_resources ? "${local.prefix}_${var.subnet_public[0].name}" : "${var.subnet_public[0].name}"
     Project = var.project
     Envrionment = var.env
     }
