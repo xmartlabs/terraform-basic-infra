@@ -1,0 +1,6 @@
+pipeline:
+  validate:
+    image: hashicorp/terraform
+    commands:
+      - terraform init -backend=false
+      - terraform validate
