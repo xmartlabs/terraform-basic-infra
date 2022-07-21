@@ -40,7 +40,7 @@ module "module-ec2-linux-web"{
     ec2name                     = var.ec2name
     size                        = var.size
     root_disk                   = var.root_disk
-    iam_instance_profile        = var.use_cloudwatch_for_logging ? module.module-cloudwatch.cloudwatch_profile[0] : null
+    iam_instance_profile        = var.use_cloudwatch_for_logging ? module.module-cloudwatch.cloudwatch_profile_name[0] : null
     create_prefix_for_resources = var.create_prefix_for_resources
 }
 
