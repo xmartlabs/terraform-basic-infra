@@ -12,7 +12,7 @@ terraform {
 ################################################################################
 
 resource "aws_db_subnet_group" "subnetgrup" {
-  name       = var.subnet_group
+  name       = var.create_prefix_for_resources ? "${var.project}_${var.env}_${var.subnet_group}" : "${var.subnet_group}"
   subnet_ids = var.subnet_ids
 
   tags = {

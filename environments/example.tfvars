@@ -32,6 +32,7 @@ rds-master         = [{ Name = "db-master" , engine = "postgres", engine_version
 db-name            = "db"
 secret_password_id = "example/db/dev"
 create_replica     = false
+subnet_group       = "subnet_group"
 
 # Elastic IP
 # We recommend using an elastic ip unless for production
