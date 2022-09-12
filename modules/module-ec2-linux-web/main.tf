@@ -19,13 +19,13 @@ resource "aws_instance" "ec2-instance" {
     volume_size = var.root_disk[0].volume_size
   }
 
-  key_name   = var.key_name
-  user_data  = templatefile(var.create_machine_script, {})
+  key_name  = var.key_name
+  user_data = templatefile(var.create_machine_script, {})
 
   tags = {
-    Name          = var.create_prefix_for_resources ? "${local.prefix}_${var.ec2name}" : "${var.ec2name}"
-    Project       = var.project
-    Environment   = var.env
+    Name        = var.create_prefix_for_resources ? "${local.prefix}_${var.ec2name}" : "${var.ec2name}"
+    Project     = var.project
+    Environment = var.env
   }
 
   network_interface {

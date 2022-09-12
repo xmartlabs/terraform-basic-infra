@@ -12,15 +12,15 @@ provider "aws" {
 }
 
 resource "aws_vpc" "vpc" {
-  cidr_block       = var.vpc[0].cidr_block
-  instance_tenancy = var.vpc[0].instance_tenancy
+  cidr_block           = var.vpc[0].cidr_block
+  instance_tenancy     = var.vpc[0].instance_tenancy
   enable_dns_hostnames = var.vpc[0].enable_dns_hostnames
-  enable_dns_support = var.vpc[0].enable_dns_support
+  enable_dns_support   = var.vpc[0].enable_dns_support
   tags = {
-    Name = "${local.prefix}_${var.vpc[0].name}"
-    Project = var.project
+    Name        = "${local.prefix}_${var.vpc[0].name}"
+    Project     = var.project
     Envrionment = var.env
-   }
+  }
 }
 
 resource "aws_subnet" "subnet-1" {
@@ -29,15 +29,15 @@ resource "aws_subnet" "subnet-1" {
   availability_zone       = var.subnet_public[0].availability_zone
   map_public_ip_on_launch = var.subnet_public[0].map_public_ip_on_launch
   tags = {
-    Name = var.create_prefix_for_resources ? "${local.prefix}_${var.subnet_public[0].name}" : "${var.subnet_public[0].name}"
-    Project = var.project
+    Name        = var.create_prefix_for_resources ? "${local.prefix}_${var.subnet_public[0].name}" : "${var.subnet_public[0].name}"
+    Project     = var.project
     Envrionment = var.env
-    }
+  }
 }
 
 resource "aws_security_group" "security_group" {
-  name        = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group[0].name}" : "${var.security_group[0].name}"
-  vpc_id      = aws_vpc.vpc.id
+  name   = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group[0].name}" : "${var.security_group[0].name}"
+  vpc_id = aws_vpc.vpc.id
   ingress {
     description = "HTTPS"
     from_port   = 443
@@ -66,46 +66,46 @@ resource "aws_security_group" "security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group[0].name}" : "${var.security_group[0].name}"
-    Project = var.project
+    Name        = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group[0].name}" : "${var.security_group[0].name}"
+    Project     = var.project
     Envrionment = var.env
-    }
+  }
 }
 
 resource "aws_internet_gateway" "igw" {
-   vpc_id = aws_vpc.vpc.id
- }
+  vpc_id = aws_vpc.vpc.id
+}
 
 resource "aws_route_table" "route_table" {
-   vpc_id = aws_vpc.vpc.id
-   route {
-     cidr_block = var.route_table[0].cidr_block
-     gateway_id = aws_internet_gateway.igw.id
-   }
-   route {
-     ipv6_cidr_block = var.route_table[0].ipv6_cidr_block
-     gateway_id      = aws_internet_gateway.igw.id
-   }
-   tags = {
-        Name = var.create_prefix_for_resources ? "${local.prefix}_${var.route_table[0].name}" : "${var.route_table[0].name}"
-        Project = var.project
-        Envrionment = var.env
-    }
+  vpc_id = aws_vpc.vpc.id
+  route {
+    cidr_block = var.route_table[0].cidr_block
+    gateway_id = aws_internet_gateway.igw.id
+  }
+  route {
+    ipv6_cidr_block = var.route_table[0].ipv6_cidr_block
+    gateway_id      = aws_internet_gateway.igw.id
+  }
+  tags = {
+    Name        = var.create_prefix_for_resources ? "${local.prefix}_${var.route_table[0].name}" : "${var.route_table[0].name}"
+    Project     = var.project
+    Envrionment = var.env
+  }
 }
 
 resource "aws_route_table_association" "a" {
-   subnet_id      = aws_subnet.subnet-1.id
-   route_table_id = aws_route_table.route_table.id
- }
+  subnet_id      = aws_subnet.subnet-1.id
+  route_table_id = aws_route_table.route_table.id
+}
 
 resource "aws_network_interface" "network_interface" {
   subnet_id       = aws_subnet.subnet-1.id
   private_ips     = var.network_interface[0].private_ips
   security_groups = [aws_security_group.security_group.id]
   tags = {
-        Name = "${local.prefix}_${var.network_interface[0].name}"
-        Project = var.project
-        Envrionment = var.env
+    Name        = "${local.prefix}_${var.network_interface[0].name}"
+    Project     = var.project
+    Envrionment = var.env
   }
 }
 

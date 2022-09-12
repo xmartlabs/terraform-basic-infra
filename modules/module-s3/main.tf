@@ -13,7 +13,7 @@ provider "aws" {
 
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.create_prefix_for_resources ? "${local.prefix}-${var.bucket[0].bucket}" : "${var.bucket[0].bucket}" 
+  bucket = var.create_prefix_for_resources ? "${local.prefix}-${var.bucket[0].bucket}" : "${var.bucket[0].bucket}"
 
   tags = {
     Name        = "${local.prefix}-${var.bucket[0].bucket}"

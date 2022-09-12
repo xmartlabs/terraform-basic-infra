@@ -3,7 +3,7 @@ variable "region" {
   description = "the region where the infrastructure will be hosted (us-east-2, us-east-1, etc)"
 }
 
-variable "env"  {
+variable "env" {
   description = "the name of the environment we are managing (staging, rc, production)"
 }
 
@@ -55,5 +55,5 @@ variable "create_machine_script" {
 # To be run after creation
 variable "iam_instance_profile" {
   description = "I am instace profile required in the ec2 instance"
-  default = null
+  default     = null
 }

@@ -1,5 +1,5 @@
 # Generics
-variable "env"  {
+variable "env" {
   description = "the name of the environment we are managing (staging, rc, production)"
 }
 
