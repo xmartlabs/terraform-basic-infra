@@ -40,5 +40,7 @@ create_elastic_ip = true
 
 # ECR
 ecr_repositories = []
-# ecr_repositories     = ["repository_1", "repository_2"]
+# In the ECR variable you can configure a list of repositories
+# For each repository you need to specify the "name" and the maximum number of images "max_image" that you want to keep
+# ecr_repositories = [{"name" = "repository_1", "max_images" = 5}]
 create_ecr_access_user = false
