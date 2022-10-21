@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 resource "aws_vpc" "vpc" {
@@ -38,14 +38,14 @@ resource "aws_subnet" "subnet-1" {
 }
 
 #Private subnet 1
-resource "aws_subnet" "subnet-2"{
+resource "aws_subnet" "subnet-2" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.subnet_private_1[0].cidr_block
   availability_zone       = var.subnet_private_1[0].availability_zone
   map_public_ip_on_launch = var.subnet_private_1[0].map_public_ip_on_launch
 
   tags = {
-    Name        = var.create_prefix_for_resources ? "${local.prefix}_${var.subnet_private_1[0].name}" : "${var.subnet_private_1[0].name}" 
+    Name        = var.create_prefix_for_resources ? "${local.prefix}_${var.subnet_private_1[0].name}" : "${var.subnet_private_1[0].name}"
     Project     = var.project
     Environment = var.env
   }
@@ -59,15 +59,15 @@ resource "aws_subnet" "subnet-3" {
   map_public_ip_on_launch = var.subnet_private_2[0].map_public_ip_on_launch
 
   tags = {
-    Name        = var.create_prefix_for_resources ?  "${local.prefix}_${var.subnet_private_2[0].name}" : "${var.subnet_private_2[0].name}"
+    Name        = var.create_prefix_for_resources ? "${local.prefix}_${var.subnet_private_2[0].name}" : "${var.subnet_private_2[0].name}"
     Project     = var.project
     Environment = var.env
   }
 }
 
 resource "aws_security_group" "security_group_web" {
-  name        = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group_web[0].name}" : "${var.security_group_web[0].name}"
-  vpc_id      = aws_vpc.vpc.id
+  name   = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group_web[0].name}" : "${var.security_group_web[0].name}"
+  vpc_id = aws_vpc.vpc.id
   ingress {
     description = "HTTPS"
     from_port   = 443
@@ -104,14 +104,14 @@ resource "aws_security_group" "security_group_web" {
 }
 
 resource "aws_security_group" "security_group_db" {
-  name        = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group_db[0].name}" : "${var.security_group_db[0].name}" 
-  vpc_id      = aws_vpc.vpc.id
-  
+  name   = var.create_prefix_for_resources ? "${local.prefix}_${var.security_group_db[0].name}" : "${var.security_group_db[0].name}"
+  vpc_id = aws_vpc.vpc.id
+
   ingress {
-      from_port   = var.security_group_db[0].dbport
-      to_port     = var.security_group_db[0].dbport
-      protocol    = "tcp"
-      cidr_blocks = [var.vpc[0].cidr_block]
+    from_port   = var.security_group_db[0].dbport
+    to_port     = var.security_group_db[0].dbport
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc[0].cidr_block]
   }
 
   tags = {
@@ -123,31 +123,31 @@ resource "aws_security_group" "security_group_db" {
 
 
 resource "aws_internet_gateway" "igw" {
-   vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.vpc.id
 }
 
 resource "aws_route_table" "route_table" {
-   vpc_id = aws_vpc.vpc.id
-   route {
-     cidr_block = var.route_table[0].cidr_block
-     gateway_id = aws_internet_gateway.igw.id
-   }
-   route {
-     ipv6_cidr_block = var.route_table[0].ipv6_cidr_block
-     gateway_id      = aws_internet_gateway.igw.id
-   }
+  vpc_id = aws_vpc.vpc.id
+  route {
+    cidr_block = var.route_table[0].cidr_block
+    gateway_id = aws_internet_gateway.igw.id
+  }
+  route {
+    ipv6_cidr_block = var.route_table[0].ipv6_cidr_block
+    gateway_id      = aws_internet_gateway.igw.id
+  }
 
-   tags = {
-     Name        = "${local.prefix}_${var.route_table[0].name}"
-     Project     = var.project
-     Environment = var.env
-   }
+  tags = {
+    Name        = "${local.prefix}_${var.route_table[0].name}"
+    Project     = var.project
+    Environment = var.env
+  }
 }
 
 resource "aws_route_table_association" "a" {
-   subnet_id      = aws_subnet.subnet-1.id
-   route_table_id = aws_route_table.route_table.id
- }
+  subnet_id      = aws_subnet.subnet-1.id
+  route_table_id = aws_route_table.route_table.id
+}
 
 resource "aws_network_interface" "network_interface" {
   subnet_id       = aws_subnet.subnet-1.id

@@ -3,7 +3,7 @@ variable "region" {
   description = "the region where the infrastructure will be hosted (us-east-2, us-east-1, etc)"
 }
 
-variable "env"  {
+variable "env" {
   description = "the name of the environment we are managing (staging, rc, production)"
 }
 
@@ -44,7 +44,7 @@ variable "security_group_web" {
 
 variable "security_group_db" {
   description = "security group definition for the rds database"
-  default     = [{ name = "security_group_db" , dbport = "5432" }]
+  default     = [{ name = "security_group_db", dbport = "5432" }]
 }
 
 variable "route_table" {

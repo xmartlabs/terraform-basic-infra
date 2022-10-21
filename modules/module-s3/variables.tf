@@ -3,7 +3,7 @@ variable "region" {
   description = "the region where the infrastructure will be hosted (us-east-2, us-east-1, etc)"
 }
 
-variable "env"  {
+variable "env" {
   description = "the name of the environment we are managing (staging, rc, production)"
 }
 
@@ -24,17 +24,17 @@ variable "bucket" {
 
 variable "cors_rule" {
   description = "definition of the cors rules applied to the created bucket"
-  default     = [{allowed_methods = ["GET"], allowed_origins = ["*"], max_age_seconds = 3000}]
+  default     = [{ allowed_methods = ["GET"], allowed_origins = ["*"], max_age_seconds = 3000 }]
 }
 
 variable "policy" {
   description = "definition of the policy applied to the created bucket"
-   default    = [{Sid = "PublicListGet", Effect = "Allow", Principal = "*"}]
+  default     = [{ Sid = "PublicListGet", Effect = "Allow", Principal = "*" }]
 }
 
 variable "action_policy" {
-   description = "definition of the action policy applied to the created bucket"
-   default     = ["s3:GetObject"]
+  description = "definition of the action policy applied to the created bucket"
+  default     = ["s3:GetObject"]
 }
 
 variable "create_bucket_access_user" {
