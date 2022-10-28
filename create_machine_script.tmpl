@@ -15,3 +15,43 @@
 
 # sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 # sudo chmod +x /usr/local/bin/docker-compose
+
+# # Monitoring memory and disk utilization with cloudwatch alarm
+# cd /tmp
+# wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+# sudo rpm -U amazon-cloudwatch-agent.rpm
+# sudo cat <<EOT >> amazon-cloudwatch-agent.json
+# {
+#    "agent":{
+#       "metrics_collection_interval":60,
+#       "run_as_user":"cwagent"
+#    },
+#    "metrics":{
+#       "append_dimensions":{
+#          "InstanceId": “$${aws:InstanceId}”
+#       },
+#       "metrics_collected":{
+#          "disk":{
+#             "measurement":[
+#                "used_percent"
+#             ],
+#             "metrics_collection_interval":60,
+#             "resources":[
+#                "/"
+#             ]
+#          },
+#          "mem":{
+#             "measurement":[
+#                "used_percent"
+#             ],
+#             "metrics_collection_interval":60,
+#             "resources":[
+#                "/"
+#             ]
+#          }
+#       }
+#    }
+# }
+# EOT
+# sudo cp amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+# sudo systemctl restart amazon-cloudwatch-agent
