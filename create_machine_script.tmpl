@@ -22,36 +22,28 @@
 # sudo rpm -U amazon-cloudwatch-agent.rpm
 # sudo cat <<EOT >> amazon-cloudwatch-agent.json
 # {
-#    "agent":{
-#       "metrics_collection_interval":60,
-#       "run_as_user":"cwagent"
-#    },
-#    "metrics":{
-#       "append_dimensions":{
-#          "InstanceId": “$${aws:InstanceId}”
+#   "agent": {
+#     "metrics_collection_interval": 60
+#   },
+#   "metrics": {
+#     "metrics_collected": {
+#       "disk": {
+#         "resources": ["/", "/tmp"],
+#         "measurement": ["disk_used_percent"],
+#         "ignore_file_system_types": ["sysfs", "devtmpfs"]
 #       },
-#       "metrics_collected":{
-#          "disk":{
-#             "measurement":[
-#                "used_percent"
-#             ],
-#             "metrics_collection_interval":60,
-#             "resources":[
-#                "/"
-#             ]
-#          },
-#          "mem":{
-#             "measurement":[
-#                "used_percent"
-#             ],
-#             "metrics_collection_interval":60,
-#             "resources":[
-#                "/"
-#             ]
-#          }
+#       "mem": {
+#         "measurement": ["mem_used_percent"]
 #       }
-#    }
+#     },
+#     "aggregation_dimensions": [["InstanceId", "InstanceType"], ["InstanceId"]],
+#     "append_dimensions": {
+#       "InstanceId": "AWS_INSTANCE_ID"
+#     }
+#   }
 # }
 # EOT
+# sudo sed -i 's/AWS_INSTANCE_ID/$${aws:InstanceId}/g' amazon-cloudwatch-agent.json
 # sudo cp amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+# sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
 # sudo systemctl restart amazon-cloudwatch-agent

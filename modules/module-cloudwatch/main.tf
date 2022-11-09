@@ -47,13 +47,18 @@ resource "aws_iam_role_policy" "cloudwatch_policy" {
     "Version": "2012-10-17",
     "Statement": [
       {
-        "Action": [
-          "logs:CreateLogStream",
-          "logs:CreateLogGroup",
-          "logs:PutLogEvents"
-        ],
         "Effect": "Allow",
-        "Resource": "arn:aws:logs:*:*:*"
+        "Action": [
+            "cloudwatch:PutMetricData",
+            "ec2:DescribeVolumes",
+            "ec2:DescribeTags",
+            "logs:PutLogEvents",
+            "logs:DescribeLogStreams",
+            "logs:DescribeLogGroups",
+            "logs:CreateLogStream",
+            "logs:CreateLogGroup"
+        ],
+        "Resource": "*"
       }
     ]
   }
@@ -81,19 +86,19 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ec2_disk" {
-  count                     = var.use_cloudwatch_for_monitoring ? 1 : 0
-  alarm_name                = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_disk_utilization" : "disk_utilization"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
-  metric_name               = "disk_used_percent"
-  namespace                 = "CWAgent"
-  period                    = "120"
-  statistic                 = "Average"
-  threshold                 = "40"
-  alarm_description         = "This metric monitors ec2 disk utilization"
-  actions_enabled           = "true"
-  alarm_actions             = [aws_sns_topic.topic[0].arn]
-  ok_actions                = [aws_sns_topic.topic[0].arn]
+  count               = var.use_cloudwatch_for_monitoring ? 1 : 0
+  alarm_name          = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_disk_utilization" : "disk_utilization"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "disk_used_percent"
+  namespace           = "CWAgent"
+  period              = "120"
+  statistic           = "Average"
+  threshold           = "40"
+  alarm_description   = "This metric monitors ec2 disk utilization"
+  actions_enabled     = "true"
+  alarm_actions       = [aws_sns_topic.topic[0].arn]
+  ok_actions          = [aws_sns_topic.topic[0].arn]
 
   dimensions = {
     path       = "/"
@@ -104,19 +109,19 @@ resource "aws_cloudwatch_metric_alarm" "ec2_disk" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ec2_mem" {
-  count                     = var.use_cloudwatch_for_monitoring ? 1 : 0
-  alarm_name                = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_mem_utilization" : "mem_utilization"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
-  metric_name               = "mem_used_percent"
-  namespace                 = "CWAgent"
-  period                    = "120"
-  statistic                 = "Average"
-  threshold                 = "40"
-  alarm_description         = "This metric monitors ec2 memory utilization"
-  actions_enabled           = "true"
-  alarm_actions             = [aws_sns_topic.topic[0].arn]
-  ok_actions                = [aws_sns_topic.topic[0].arn]
+  count               = var.use_cloudwatch_for_monitoring ? 1 : 0
+  alarm_name          = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_mem_utilization" : "mem_utilization"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "mem_used_percent"
+  namespace           = "CWAgent"
+  period              = "120"
+  statistic           = "Average"
+  threshold           = "40"
+  alarm_description   = "This metric monitors ec2 memory utilization"
+  actions_enabled     = "true"
+  alarm_actions       = [aws_sns_topic.topic[0].arn]
+  ok_actions          = [aws_sns_topic.topic[0].arn]
 
   dimensions = {
     InstanceId = var.ec2_instance_id
@@ -125,7 +130,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_mem" {
 
 resource "aws_sns_topic" "topic" {
   count = var.use_cloudwatch_for_monitoring ? 1 : 0
-  name  = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_cpu-utilization-topic": "cpu-utilization-topic"
+  name  = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_cpu-utilization-topic" : "cpu-utilization-topic"
 }
 
 resource "aws_sns_topic_subscription" "topic_email_subscription" {
