@@ -44,3 +44,8 @@ ecr_repositories = []
 # For each repository you need to specify the "name" and the maximum number of images "max_image" that you want to keep
 # ecr_repositories = [{"name" = "repository_1", "max_images" = 5}]
 create_ecr_access_user = false
+
+# Cloudwatch
+use_cloudwatch_for_logging    = false
+use_cloudwatch_for_monitoring = false
+notification_email_list       = []
