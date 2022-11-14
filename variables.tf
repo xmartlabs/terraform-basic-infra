@@ -156,6 +156,16 @@ variable "use_cloudwatch_for_logging" {
   default     = false
 }
 
+variable "use_cloudwatch_for_monitoring" {
+  description = "boolean variable to enable the cloudwatch usage for instance monitoring"
+  default     = false
+}
+
+variable "notification_email_list" {
+  description = "notification email list to send alarms notifications"
+  default     = []
+}
+
 # AWS Simple email Service
 variable "enable_aws_ses" {
   description = "variable to enable the aws ses configuration"
