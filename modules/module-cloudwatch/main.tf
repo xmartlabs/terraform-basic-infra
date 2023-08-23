@@ -8,63 +8,6 @@ resource "aws_cloudwatch_log_group" "log-group" {
   retention_in_days = 30
 }
 
-resource "aws_iam_role" "cloudwatch_role" {
-  count = var.use_cloudwatch_for_logging || var.use_cloudwatch_for_monitoring ? 1 : 0
-  name  = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_role" : "${var.cloudwatch_log_group}_role"
-
-  assume_role_policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": [
-          "sts:AssumeRole"
-        ],
-        "Principal": {
-            "Service": "ec2.amazonaws.com"
-        },
-        "Effect": "Allow",
-        "Sid": ""
-      }
-    ]
-  }
-  EOF
-}
-
-resource "aws_iam_instance_profile" "cloudwatch_profile" {
-  count = var.use_cloudwatch_for_logging || var.use_cloudwatch_for_monitoring ? 1 : 0
-  name  = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_profile" : "${var.cloudwatch_log_group}_profile"
-  role  = aws_iam_role.cloudwatch_role[0].name
-}
-
-resource "aws_iam_role_policy" "cloudwatch_policy" {
-  count = var.use_cloudwatch_for_logging ? 1 : 0
-  name  = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_password-policy-parameterstore" : "${var.cloudwatch_log_group}_password-policy-parameterstore"
-  role  = aws_iam_role.cloudwatch_role[0].id
-
-  policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": [
-            "cloudwatch:PutMetricData",
-            "ec2:DescribeVolumes",
-            "ec2:DescribeTags",
-            "logs:PutLogEvents",
-            "logs:DescribeLogStreams",
-            "logs:DescribeLogGroups",
-            "logs:CreateLogStream",
-            "logs:CreateLogGroup"
-        ],
-        "Resource": "*"
-      }
-    ]
-  }
-  EOF
-}
-
 resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
   count                     = var.use_cloudwatch_for_monitoring ? 1 : 0
   alarm_name                = var.create_prefix_for_resources ? "${local.prefix}_${var.cloudwatch_log_group}_cpu_utilization" : "cpu_utilization"

@@ -28,6 +28,14 @@ module "module-network-linux-web-db" {
 # EC2
 ################################################################################
 
+module "module-ec2-iam" {
+  source = "./modules/module-ec2-iam"
+  env = var.env
+  project = var.project
+  create_ec2_iam = var.create_ec2_iam
+  create_ecr_policy = length(var.ecr_repositories) > 0
+}
+
 module "module-ec2-linux-web" {
   source                      = "./modules/module-ec2-linux-web"
   region                      = var.region
@@ -40,7 +48,7 @@ module "module-ec2-linux-web" {
   ec2name                     = var.ec2name
   size                        = var.size
   root_disk                   = var.root_disk
-  iam_instance_profile        = var.use_cloudwatch_for_logging || var.use_cloudwatch_for_monitoring ? module.module-cloudwatch.cloudwatch_profile_name[0] : null
+  iam_instance_profile        = var.create_ec2_iam ? module.module-ec2-iam.ec2_profile_name[0] : null
   create_prefix_for_resources = var.create_prefix_for_resources
 }
 
