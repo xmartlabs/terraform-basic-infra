@@ -89,6 +89,11 @@ variable "create_machine_script" {
   default     = "create_machine_script.tmpl"
 }
 
+variable "create_ec2_iam" {
+  description = "whether to create an iam profile for the ec2 with cloudwatch and ecr access"
+  default = true
+}
+
 # RDS
 variable "rds-master" {
   description = "the definition of the RDS database"
