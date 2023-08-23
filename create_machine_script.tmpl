@@ -43,7 +43,7 @@
 #   }
 # }
 # EOT
-# sudo sed -i 's/AWS_INSTANCE_ID/$${aws:InstanceId}/g' amazon-cloudwatch-agent.json
+# sudo sed -i 's/AWS_INSTANCE_ID/${aws:InstanceId}/g' amazon-cloudwatch-agent.json
 # sudo cp amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
 # sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
 # sudo systemctl restart amazon-cloudwatch-agent
